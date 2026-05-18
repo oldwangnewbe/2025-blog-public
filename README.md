@@ -6,7 +6,7 @@
 
 > Docker 部署说明：见 [DEPLOY_DOCKER.md](./DEPLOY_DOCKER.md)
 
-> 服务器直接部署：下载 `docker-compose.remote.yml` 为 `docker-compose.yml`，配置 `.env` 后运行 `docker compose up -d --build`
+> 服务器直接部署：下载 `docker-compose.remote.yml` 为 `docker-compose.yml`，在 yml 顶部配置参数后运行 `docker compose up -d --build`
 
 该项目使用 Github App 管理项目内容，请保管好后续创建的 **Private key**，不要上传到公开网上。
 

@@ -19,25 +19,27 @@ mkdir -p 2025-blog
 cd 2025-blog
 ```
 
-下载 Compose 文件和环境变量模板：
+下载一个 Compose 文件：
 
 ```bash
 curl -fsSL -o docker-compose.yml https://raw.githubusercontent.com/oldwangnewbe/2025-blog-public/main/docker-compose.remote.yml
-curl -fsSL -o .env https://raw.githubusercontent.com/oldwangnewbe/2025-blog-public/main/.env.example
 ```
 
-编辑 `.env`：
+编辑 `docker-compose.yml` 顶部的 `x-blog-config`：
 
-```dotenv
-APP_PORT=3000
-NEXT_PUBLIC_SITE_URL=https://你的域名
-SITE_URL=https://你的域名
-NEXT_PUBLIC_GITHUB_OWNER=你的 GitHub 用户名或组织名
-NEXT_PUBLIC_GITHUB_REPO=你的博客仓库名
-NEXT_PUBLIC_GITHUB_BRANCH=main
-NEXT_PUBLIC_GITHUB_APP_ID=你的 GitHub App ID
-NEXT_PUBLIC_GITHUB_ENCRYPT_KEY=换成你自己的随机字符串
+```yaml
+x-blog-config: &blog-config
+  NEXT_PUBLIC_SITE_URL: "https://你的域名"
+  SITE_URL: "https://你的域名"
+  NEXT_PUBLIC_GITHUB_OWNER: "你的 GitHub 用户名或组织名"
+  NEXT_PUBLIC_GITHUB_REPO: "你的博客仓库名"
+  NEXT_PUBLIC_GITHUB_BRANCH: "main"
+  NEXT_PUBLIC_GITHUB_APP_ID: "你的 GitHub App ID"
+  NEXT_PUBLIC_GITHUB_ENCRYPT_KEY: "换成你自己的随机字符串"
+  BLOG_SLUG_KEY: ""
 ```
+
+如果要换端口，把 `ports` 里的 `"3000:3000"` 改成 `"8080:3000"` 这种格式即可。
 
 注意：`NEXT_PUBLIC_*` 会在构建时写入前端资源。修改这些变量后，需要重新构建镜像。
 
@@ -59,14 +61,11 @@ docker compose logs -f blog
 http://服务器IP:3000
 ```
 
-如果你修改了 `APP_PORT`，访问端口也要跟着变化。
-
 ## 2. 本地源码部署
 
 如果你已经把仓库克隆到服务器，也可以在仓库目录里直接运行：
 
 ```bash
-cp .env.example .env
 docker compose up -d --build
 ```
 
@@ -75,7 +74,6 @@ docker compose up -d --build
 直接部署模式更新：
 
 ```bash
-docker compose pull
 docker compose up -d --build
 ```
 
@@ -132,14 +130,15 @@ docker compose up -d --build
 
 ### GitHub App 已配置但页面仍然写入失败
 
-确认 GitHub App 安装到了目标仓库，并且仓库权限包含 Contents Read and write。还要确认 `.env` 中的 `NEXT_PUBLIC_GITHUB_OWNER`、`NEXT_PUBLIC_GITHUB_REPO`、`NEXT_PUBLIC_GITHUB_BRANCH` 和 `NEXT_PUBLIC_GITHUB_APP_ID` 都是你的值。
+确认 GitHub App 安装到了目标仓库，并且仓库权限包含 Contents Read and write。还要确认 `docker-compose.yml` 顶部的 `NEXT_PUBLIC_GITHUB_OWNER`、`NEXT_PUBLIC_GITHUB_REPO`、`NEXT_PUBLIC_GITHUB_BRANCH` 和 `NEXT_PUBLIC_GITHUB_APP_ID` 都是你的值。
 
 ### 想换端口
 
-修改 `.env`：
+修改 `docker-compose.yml`：
 
-```dotenv
-APP_PORT=8080
+```yaml
+ports:
+  - "8080:3000"
 ```
 
 然后重启：
