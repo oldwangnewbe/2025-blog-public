@@ -2,6 +2,7 @@ import { NextConfig } from 'next'
 import { codeInspectorPlugin } from 'code-inspector-plugin'
 
 const nextConfig: NextConfig = {
+	output: process.env.NEXT_STANDALONE === 'true' ? 'standalone' : undefined,
 	devIndicators: false,
 	reactStrictMode: false,
 	reactCompiler: true,
