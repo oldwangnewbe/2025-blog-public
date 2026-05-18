@@ -2,18 +2,24 @@
 
 FROM node:22-alpine AS base
 
+ARG NPM_REGISTRY=https://registry.npmmirror.com
+ARG PNPM_VERSION=10.24.0
+
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NPM_CONFIG_REGISTRY=$NPM_REGISTRY
 
 WORKDIR /app
 
-RUN corepack enable
+RUN npm install -g pnpm@${PNPM_VERSION} --registry=${NPM_REGISTRY} \
+	&& pnpm config set registry ${NPM_REGISTRY} \
+	&& pnpm config set store-dir /pnpm/store
 
 FROM base AS deps
 
-COPY package.json pnpm-lock.yaml .npmrc ./
-RUN pnpm install --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS builder
 

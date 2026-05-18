@@ -39,6 +39,14 @@ x-blog-config: &blog-config
   BLOG_SLUG_KEY: ""
 ```
 
+如果你的服务器访问 npm 官方源更快，可以把 `x-build-config` 里的 `NPM_REGISTRY` 改成 `https://registry.npmjs.org`：
+
+```yaml
+x-build-config: &build-config
+  NPM_REGISTRY: "https://registry.npmmirror.com"
+  PNPM_VERSION: "10.24.0"
+```
+
 如果要换端口，把 `ports` 里的 `"3000:3000"` 改成 `"8080:3000"` 这种格式即可。
 
 注意：`NEXT_PUBLIC_*` 会在构建时写入前端资源。修改这些变量后，需要重新构建镜像。
@@ -126,6 +134,31 @@ server {
 
 ```bash
 docker compose up -d --build
+```
+
+### 卡在 pnpm install 或下载依赖失败
+
+默认已经使用 `https://registry.npmmirror.com`。如果你的服务器在海外，可以改成：
+
+```yaml
+x-build-config: &build-config
+  NPM_REGISTRY: "https://registry.npmjs.org"
+  PNPM_VERSION: "10.24.0"
+```
+
+然后重新构建：
+
+```bash
+docker compose up -d --build
+```
+
+### 报 `ERR_PNPM_IGNORED_BUILDS`
+
+项目已经在 `pnpm-workspace.yaml` 里允许 `esbuild`、`sharp`、`workerd` 运行安装脚本。更新到最新的 `docker-compose.yml` 后重新构建：
+
+```bash
+docker compose build --no-cache
+docker compose up -d
 ```
 
 ### GitHub App 已配置但页面仍然写入失败

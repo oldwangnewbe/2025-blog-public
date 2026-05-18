@@ -12,6 +12,10 @@ x-blog-config: &blog-config
   NEXT_PUBLIC_GITHUB_ENCRYPT_KEY: "wudishiduomejimo"
   BLOG_SLUG_KEY: ""
 
+x-build-config: &build-config
+  NPM_REGISTRY: "https://registry.npmmirror.com"
+  PNPM_VERSION: "10.24.0"
+
 services:
   blog:
     image: 2025-blog:latest
@@ -19,7 +23,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        <<: *blog-config
+        <<: [*blog-config, *build-config]
     restart: unless-stopped
     ports:
       - "3000:3000"
