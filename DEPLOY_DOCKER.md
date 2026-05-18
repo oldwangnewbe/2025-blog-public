@@ -1,6 +1,8 @@
-# Docker 部署指南
+# Docker Compose 部署指南
 
-这份配置用于把项目部署到自己的服务器上。镜像使用 Next.js standalone 产物运行，不依赖 Vercel 或 Cloudflare。
+这份配置用于把项目直接部署到自己的服务器上。镜像使用 Next.js standalone 产物运行，不依赖 Vercel 或 Cloudflare。
+
+原作者项目：https://github.com/YYsuni/2025-blog-public
 
 ## 服务器要求
 
@@ -8,15 +10,23 @@
 - Docker Compose v2+
 - 建议内存 1GB 以上
 
-## 1. 准备环境变量
+## 1. 直接部署
 
-复制模板：
+在服务器上新建目录：
 
 ```bash
-cp .env.example .env
+mkdir -p 2025-blog
+cd 2025-blog
 ```
 
-至少建议修改：
+下载 Compose 文件和环境变量模板：
+
+```bash
+curl -fsSL -o docker-compose.yml https://raw.githubusercontent.com/oldwangnewbe/2025-blog-public/main/docker-compose.remote.yml
+curl -fsSL -o .env https://raw.githubusercontent.com/oldwangnewbe/2025-blog-public/main/.env.example
+```
+
+编辑 `.env`：
 
 ```dotenv
 APP_PORT=3000
@@ -31,7 +41,7 @@ NEXT_PUBLIC_GITHUB_ENCRYPT_KEY=换成你自己的随机字符串
 
 注意：`NEXT_PUBLIC_*` 会在构建时写入前端资源。修改这些变量后，需要重新构建镜像。
 
-## 2. 构建并启动
+启动：
 
 ```bash
 docker compose up -d --build
@@ -51,9 +61,25 @@ http://服务器IP:3000
 
 如果你修改了 `APP_PORT`，访问端口也要跟着变化。
 
-## 3. 更新部署
+## 2. 本地源码部署
 
-拉取新代码后重新构建：
+如果你已经把仓库克隆到服务器，也可以在仓库目录里直接运行：
+
+```bash
+cp .env.example .env
+docker compose up -d --build
+```
+
+## 3. 更新
+
+直接部署模式更新：
+
+```bash
+docker compose pull
+docker compose up -d --build
+```
+
+源码部署模式更新：
 
 ```bash
 git pull

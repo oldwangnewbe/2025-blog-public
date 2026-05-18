@@ -1,0 +1,30 @@
+services:
+  blog:
+    image: 2025-blog:latest
+    build:
+      context: https://github.com/oldwangnewbe/2025-blog-public.git#main
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_GITHUB_OWNER: ${NEXT_PUBLIC_GITHUB_OWNER:-yysuni}
+        NEXT_PUBLIC_GITHUB_REPO: ${NEXT_PUBLIC_GITHUB_REPO:-2025-blog-public}
+        NEXT_PUBLIC_GITHUB_BRANCH: ${NEXT_PUBLIC_GITHUB_BRANCH:-main}
+        NEXT_PUBLIC_GITHUB_APP_ID: ${NEXT_PUBLIC_GITHUB_APP_ID:-}
+        NEXT_PUBLIC_GITHUB_ENCRYPT_KEY: ${NEXT_PUBLIC_GITHUB_ENCRYPT_KEY:-wudishiduomejimo}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+        SITE_URL: ${SITE_URL:-http://localhost:3000}
+        BLOG_SLUG_KEY: ${BLOG_SLUG_KEY:-}
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      NEXT_PUBLIC_GITHUB_OWNER: ${NEXT_PUBLIC_GITHUB_OWNER:-yysuni}
+      NEXT_PUBLIC_GITHUB_REPO: ${NEXT_PUBLIC_GITHUB_REPO:-2025-blog-public}
+      NEXT_PUBLIC_GITHUB_BRANCH: ${NEXT_PUBLIC_GITHUB_BRANCH:-main}
+      NEXT_PUBLIC_GITHUB_APP_ID: ${NEXT_PUBLIC_GITHUB_APP_ID:-}
+      NEXT_PUBLIC_GITHUB_ENCRYPT_KEY: ${NEXT_PUBLIC_GITHUB_ENCRYPT_KEY:-wudishiduomejimo}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+      BLOG_SLUG_KEY: ${BLOG_SLUG_KEY:-}
