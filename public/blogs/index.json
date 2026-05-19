@@ -1,5 +1,20 @@
 [
   {
+    "slug": "docker-learning",
+    "title": "Docker 入门学习笔记",
+    "tags": [
+      "Docker",
+      "Linux",
+      "部署",
+      "学习笔记"
+    ],
+    "date": "2026-05-19",
+    "summary": "根据 Docker 视频课程整理的一篇入门笔记，从镜像、容器、端口映射、挂载、网络、Compose 到 Dockerfile，串起部署和排障的基本思路。",
+    "cover": "/blogs/docker-learning/cover.png",
+    "hidden": false,
+    "category": "学习"
+  },
+  {
     "slug": "yh-fish",
     "title": "游戏工具-异环自动钓鱼",
     "tags": [],
